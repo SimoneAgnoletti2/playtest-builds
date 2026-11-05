@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#0d1117" />
+    <title>Conquest Climb</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230d1117'/%3E%3Crect x='2' y='2' width='7' height='7' fill='%232ecc71'/%3E%3Crect x='9' y='9' width='5' height='5' fill='%23ff4d6d'/%3E%3C/svg%3E" />
+    <script type="module" crossorigin src="./assets/index-3GPN2msX.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-C3mMajAh.css">
+  </head>
+  <body>
+    <main class="app">
+      <!-- Partita -->
+      <section id="play" class="play">
+        <header class="hud">
+          <button id="btn-menu" class="icon-btn" aria-label="Menu">☰</button>
+          <div class="chip" id="round-chip"><span id="round-num">1/8</span> <b id="round-name">Meadow</b></div>
+          <div class="chip moves" id="moves-chip"><span class="lbl">moves</span> <b id="moves">30</b></div>
+          <div class="chip threat" id="threat-chip" hidden></div>
+          <button id="btn-power" class="icon-btn power-btn" hidden aria-label="God power"></button>
+        </header>
+        <div class="goal">
+          <div class="goal-bar"><div id="goal-fill" class="goal-fill"></div><div id="goal-mark" class="goal-mark"></div></div>
+          <div class="goal-text"><b id="score">0</b> / <span id="target">60</span> points <span id="boss" class="boss"></span></div>
+        </div>
+        <div id="relic-tray" class="relic-tray" aria-label="Relics"></div>
+        <div class="board-wrap"><canvas id="board" aria-label="Game grid"></canvas></div>
+        <p id="log" class="log"></p>
+        <div class="pad" aria-label="Controls">
+          <button data-dir="up" aria-label="Up">▲</button>
+          <button data-dir="left" aria-label="Left">◀</button>
+          <button data-dir="down" aria-label="Down">▼</button>
+          <button data-dir="right" aria-label="Right">▶</button>
+        </div>
+      </section>
+
+      <!-- Menu iniziale -->
+      <section id="home" class="overlay">
+        <div class="card home-card">
+          <h1 class="logo"><span>CON</span><span>QU</span><span>EST</span></h1>
+          <p class="tag">Fence in land, collect relics, climb 8 lands.</p>
+          <p class="stars-line">★ <b id="home-stars">0</b> stars · best <b id="home-best">0</b></p>
+          <div id="theme-picker" class="theme-picker" role="group" aria-label="Theme"></div>
+          <p id="theme-note" class="note"></p>
+          <div id="god-picker" class="theme-picker" role="group" aria-label="God" hidden></div>
+          <p class="note">Your mark:</p>
+          <div id="signature-pattern" class="theme-picker" role="group" aria-label="Pattern"></div>
+          <div id="signature-color" class="theme-picker" role="group" aria-label="Colour"></div>
+          <button id="btn-daily" class="primary big">Daily climb</button>
+          <p id="daily-note" class="note"></p>
+          <button id="btn-free" class="big">Free climb</button>
+          <p class="note">One against all:</p>
+          <div class="row">
+            <button id="btn-king">👑 The king</button>
+            <button id="btn-revolt">✊ Revolt</button>
+          </div>
+          <button id="btn-city" class="big">🏙️ Your real city</button>
+          <div class="row">
+            <button id="btn-collection">Collection</button>
+            <button id="btn-help">How to play</button>
+            <button id="btn-sound" aria-label="Sound">🔊</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Fine partita sulla città vera -->
+      <section id="city-over" class="overlay" hidden>
+        <div class="card over-card">
+          <p class="kicker">Your real city</p>
+          <h2 id="city-over-title">Result</h2>
+          <p class="note" id="city-over-text"></p>
+          <p class="note" id="city-over-attrib"></p>
+          <div class="row">
+            <button id="btn-city-quadro">🖼️ My picture</button>
+            <button id="btn-city-home" class="primary">Menu</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Fine duello -->
+      <section id="duel-over" class="overlay" hidden>
+        <div class="card over-card">
+          <p class="kicker">One against all</p>
+          <h2 id="duel-over-title">Victory!</h2>
+          <p class="note" id="duel-over-text"></p>
+          <div class="row">
+            <button id="btn-duel-quadro">🖼️ My picture</button>
+            <button id="btn-duel-home" class="primary">Menu</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Inizio territorio -->
+      <section id="intro" class="overlay" hidden>
+        <div class="card intro-card">
+          <p class="kicker" id="intro-kicker">Land 1 of 8</p>
+          <h2 id="intro-name">Meadow</h2>
+          <p id="intro-boss" class="boss-big" hidden></p>
+          <div class="intro-stats">
+            <div><span>Target</span><b id="intro-target">60</b></div>
+            <div><span>Moves</span><b id="intro-moves">30</b></div>
+          </div>
+          <p class="note">The longer the trail, the higher the multiplier. If it gets cut, the land is over.</p>
+          <p id="intro-theme" class="note theme-hint" hidden></p>
+          <button id="btn-go" class="primary big">Go!</button>
+        </div>
+      </section>
+
+      <!-- Reliquia -->
+      <section id="reward" class="overlay" hidden>
+        <div class="card reward-card">
+          <p class="kicker">Land cleared</p>
+          <h2><span id="reward-score">0</span> <small>/ <span id="reward-target">0</span></small></h2>
+          <p class="note" id="reward-carry"></p>
+          <p class="choose">Pick a relic</p>
+          <div id="offers" class="offers"></div>
+          <button id="btn-skip" class="link">Skip</button>
+          <p class="choose">🌾 Resources: <b id="reward-resources">0</b> (build while they last)</p>
+          <div id="buildings" class="offers"></div>
+        </div>
+      </section>
+
+      <!-- Fine run -->
+      <section id="over" class="overlay" hidden>
+        <div class="card over-card">
+          <p class="kicker" id="over-kicker">Climb over</p>
+          <h2 id="over-title">Land 3</h2>
+          <div id="over-bar" class="over-bar"></div>
+          <p class="total">🏆 <b id="over-total">0</b> points</p>
+          <p class="stars-gain">★ +<b id="over-stars">0</b> stars</p>
+          <div id="over-unlocks" class="unlocks"></div>
+          <p id="over-official" class="note"></p>
+          <pre id="share" class="share"></pre>
+          <div class="row">
+            <button id="btn-again" class="primary">Play again</button>
+            <button id="btn-home">Menu</button>
+          </div>
+          <div class="row">
+            <button id="btn-copy">Copy result</button>
+            <button id="btn-challenge">Challenge a friend</button>
+          </div>
+          <div class="row">
+            <button id="btn-quadro">🖼️ My picture</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Collezione -->
+      <section id="collection" class="overlay" hidden>
+        <div class="card coll-card">
+          <h2>Collection</h2>
+          <p class="note">★ <b id="coll-stars">0</b> stars. You earn stars by clearing lands.</p>
+          <h3>Trails</h3>
+          <div id="skins" class="skins"></div>
+          <h3>Relics</h3>
+          <div id="relic-list" class="relic-list"></div>
+          <button id="btn-coll-close" class="primary">Done</button>
+        </div>
+      </section>
+
+      <!-- Regole -->
+      <section id="help" class="overlay" hidden>
+        <div class="card help-card">
+          <h2>How to play</h2>
+          <ul>
+            <li>Each move shifts your head by one cell (arrows/WASD, swipe, tap on the grid or the buttons). Then the 3 rivals move.</li>
+            <li>Outside your colour you leave a trail; coming back you capture the trail and everything it encloses.</li>
+            <li><b>Points = cells × multiplier.</b> The multiplier rises by 1 every 4 trail cells: long loops are worth more but are riskier. Gems are worth double.</li>
+            <li>If a rival steps on your trail, the land ends at once (points already scored stay). You can do the same to them.</li>
+            <li>Reach the target within the moves to go to the next land and pick a <b>relic</b> that bends the rules in your favour. 8 lands; the 4th and 8th are harder.</li>
+            <li>The <b>Daily climb</b> is the same for everyone: same maps, same relic offers (base ones only). The first attempt is the official one. Relics unlocked with stars appear in the Free climb.</li>
+          </ul>
+          <button id="btn-help-close" class="primary">Got it</button>
+        </div>
+      </section>
+
+      <div id="toast" class="toast" hidden></div>
+    </main>
+  </body>
+</html>

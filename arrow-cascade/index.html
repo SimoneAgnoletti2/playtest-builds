@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#f5f2ec" />
+    <title>Arrow Cascade</title>
+    <link rel="icon" href="data:," />
+    <script type="module" crossorigin src="./assets/index-BezzWlOs.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-pkPIiN_Q.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="top">
+        <h1>Arrow Cascade</h1>
+        <p class="sub">Daily puzzle · <span id="seed"></span> <button id="menu-toggle" class="menu-toggle" aria-expanded="false" aria-controls="menu">☰ Modes</button></p>
+        <div id="menu" hidden>
+        <nav class="themes" aria-label="Theme">
+          <button data-theme="cozy" title="Cozy">🌿 Cozy</button>
+          <button data-theme="neon" title="Neon">✨ Neon</button>
+          <button data-theme="calcio" title="Football">⚽ Football</button>
+        </nav>
+        <nav class="tabs" aria-label="Modes">
+          <button data-mode="classic">Classic</button>
+          <button data-mode="chain">Cascade</button>
+          <button data-mode="tide">Tide</button>
+          <button data-mode="flip">Jam</button>
+          <button data-mode="duel">Duel</button>
+          <button data-mode="gravity">Gravity</button>
+          <button data-mode="keys">Keys</button>
+          <button data-mode="mirrors">Mirrors</button>
+          <button data-mode="challenge">Challenge</button>
+          <button data-mode="mult">Multiplier</button>
+          <button data-mode="editor">Editor</button>
+        </nav>
+        </div>
+        <ol id="dots" class="dots" aria-label="Levels"></ol>
+      </header>
+
+      <section id="stats" class="stats" aria-live="polite">
+        <div class="stat"><span id="l1" class="label"></span><span id="v1" class="value"></span></div>
+        <div class="stat"><span id="l2" class="label"></span><span id="v2" class="value"></span></div>
+        <div class="stat"><span id="l3" class="label"></span><span id="v3" class="value"></span></div>
+      </section>
+
+      <div id="meter" class="meter" hidden><div id="meter-fill"></div></div>
+
+      <section id="mult-hud" class="mult-hud" hidden>
+        <div class="mult-main">
+          <div id="mult-num" class="mult-num" data-tier="0" aria-live="polite">x1</div>
+          <div class="mult-side">
+            <div class="mult-score"><span id="mult-score">0</span><span class="mult-of"> / <span id="mult-target">0</span></span></div>
+            <div class="mult-bar"><div id="mult-bar-fill"></div></div>
+            <small id="mult-chain" class="mult-chain"></small>
+          </div>
+        </div>
+        <div id="mult-relics" class="mult-relics"></div>
+      </section>
+
+      <div class="board-wrap" id="board-wrap">
+        <svg id="board" class="board" xmlns="http://www.w3.org/2000/svg" role="grid" aria-label="Game grid"></svg>
+        <div id="float" class="float" aria-hidden="true"></div>
+      </div>
+
+      <p id="msg" class="msg" aria-live="polite"></p>
+
+      <div class="actions" id="level-actions">
+        <button id="hint">Hint</button>
+        <button id="flipbtn" hidden>Flip</button>
+        <button id="restart">Restart</button>
+        <button id="pass" hidden>Vs a friend</button>
+      </div>
+
+      <section id="editor" class="editor" hidden>
+        <div id="editor-build">
+          <div class="editor-row">
+            <span class="editor-label">Grid</span>
+            <div class="seg" id="editor-size">
+              <button data-size="5">5×5</button>
+              <button data-size="6">6×6</button>
+              <button data-size="7">7×7</button>
+              <button data-size="8">8×8</button>
+            </div>
+          </div>
+          <div class="editor-row">
+            <span class="editor-label">Tap</span>
+            <div class="seg" id="editor-tool">
+              <button data-tool="draw" class="on">Arrow</button>
+              <button data-tool="mirror-/">Mirror /</button>
+              <button data-tool="mirror-\">Mirror \</button>
+              <button data-tool="erase">Erase</button>
+            </div>
+          </div>
+          <div class="editor-row" id="editor-path-actions" hidden>
+            <span class="editor-label">Direction</span>
+            <div class="seg" id="editor-dir">
+              <button data-dir="U">▲</button>
+              <button data-dir="D">▼</button>
+              <button data-dir="L">◀</button>
+              <button data-dir="R">▶</button>
+            </div>
+            <button id="editor-finish">Finish arrow</button>
+            <button id="editor-cancel-path">Cancel</button>
+          </div>
+          <div class="editor-row" id="editor-arrow-panel" hidden>
+            <span class="editor-label" id="editor-arrow-label"></span>
+            <span class="editor-sub">Lock</span>
+            <div class="seg" id="editor-lock"></div>
+            <span class="editor-sub">Key</span>
+            <div class="seg" id="editor-key"></div>
+            <button id="editor-delete-arrow">Delete arrow</button>
+          </div>
+          <p class="editor-count" id="editor-count"></p>
+          <div class="end-actions">
+            <button id="editor-test" class="primary">Try the level</button>
+            <button id="editor-share">Check and share</button>
+          </div>
+        </div>
+        <div id="editor-share-result" class="panel" hidden>
+          <p id="editor-share-msg"></p>
+          <textarea id="editor-link" readonly rows="3"></textarea>
+          <div class="end-actions">
+            <button id="editor-copy-link" class="primary">Copy link</button>
+            <button id="editor-back-build">Back to editing</button>
+          </div>
+        </div>
+        <div id="editor-play" hidden>
+          <p id="editor-play-note" class="note"></p>
+          <div class="end-actions">
+            <button id="editor-back-from-play">Back to editing</button>
+            <button id="editor-new-from-shared" hidden>Create your own level</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="pick" class="panel pick" hidden>
+        <h2>Pick a relic</h2>
+        <p class="note" id="pick-sub"></p>
+        <div id="pick-cards" class="pick-cards"></div>
+      </section>
+
+      <section id="won" class="panel" hidden>
+        <h2 id="won-title"></h2>
+        <p id="won-detail" class="stars"></p>
+        <div class="end-actions" id="won-actions">
+          <button id="next" class="primary">Next level</button>
+          <button id="again" hidden>Play again</button>
+        </div>
+      </section>
+
+      <section id="lost" class="panel" hidden>
+        <h2 id="lost-title">Out of hearts</h2>
+        <p id="lost-detail" class="stars">The level restarts from scratch (counts as a new attempt).</p>
+        <button id="retry" class="primary">Retry</button>
+      </section>
+
+      <section id="end" class="panel" hidden>
+        <h2 id="end-title">Daily challenge complete</h2>
+        <pre id="share"></pre>
+        <div class="end-actions">
+          <button id="copy" class="primary">Copy result</button>
+          <button id="replay">Play again</button>
+          <button id="newrun" hidden>New run</button>
+          <button id="more-modes">More modes</button>
+        </div>
+        <p id="end-note" class="note">New levels tomorrow, the same for everyone.</p>
+      </section>
+
+      <details class="help">
+        <summary>How to play</summary>
+        <ul id="help"></ul>
+      </details>
+    </main>
+  </body>
+</html>
